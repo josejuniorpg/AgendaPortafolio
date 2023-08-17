@@ -10,14 +10,15 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
-class PersonaSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+class PersonaSerializer(serializers.Serializer): #Serializador Geneeruci.
     full_name = serializers.CharField()
+    id = serializers.IntegerField()
     job = serializers.CharField()
     email = serializers.EmailField()
     phone = serializers.CharField()
     #
-    activo = serializers.BooleanField(required=False)
+    activo = serializers.BooleanField(default=False)
+    #activo = serializers.BooleanField(required=False)
 
 
 class PersonaSerializer2(serializers.ModelSerializer):
@@ -36,17 +37,16 @@ class ReunionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reunion
-        fields = (
-            'id',
+        fields = ( #Campos que quiero serializar
+            'id', #literal solo apareceran estos campos
             'fecha',
             'hora',
             'asunto',
-            'persona',
+            'persona', #persona es un campo foraneo
         )
 
 
 class HobbySerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Hobby
         fields = ('__all__')
@@ -100,13 +100,13 @@ class ReunionSerializerLink(serializers.HyperlinkedModelSerializer):
             'asunto',
             'persona',
         )
-        extra_kwargs = {
+        extra_kwargs = { #Variable del HyperlinkedModelSerializer
             'persona': {'view_name': 'persona_app:detalle', 'lookup_field': 'pk'}
         }
 
 
 class PersonPagination(pagination.PageNumberPagination):
-    page_size = 5
+    page_size = 2
     max_page_size = 100
 
 

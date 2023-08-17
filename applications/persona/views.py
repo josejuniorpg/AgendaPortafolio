@@ -22,7 +22,7 @@ from .serializers import (
     PersonaSerializer3,
     ReunionSerializerLink,
     PersonPagination,
-    CountReunionSerializer
+    CountReunionSerializer, ReunionSerializer2
 )
 
 
@@ -43,7 +43,7 @@ class PersonListApiView(ListAPIView):
         return Person.objects.all()
 
 
-class PersonListView(TemplateView):
+class PersonListView(TemplateView): #Vista para el Ajax
     template_name = 'persona/lista.html'
     
 
@@ -62,12 +62,15 @@ class PersonSearchApiView(ListAPIView):
 class PersonCreateView(CreateAPIView):
     
     serializer_class = PersonSerializer
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        return super().post(request, *args, **kwargs)
 
 
 class PersonDetailView(RetrieveAPIView):
 
     serializer_class = PersonSerializer
-    queryset = Person.objects.all()
+    queryset = Person.objects.all() #Modelo donde buscara datos. Es obligatorio
 
 
 class PersonDeleteView(DestroyAPIView):
@@ -90,7 +93,8 @@ class PersonApiLista(ListAPIView):
         Vista para interactuar con serializadores
     """
 
-    # serializer_class = PersonaSerializer
+    #serializer_class = PersonaSerializer
+    # serializer_class = PersonaSerializer2
     serializer_class = PersonaSerializer3
 
     def get_queryset(self):
@@ -98,9 +102,8 @@ class PersonApiLista(ListAPIView):
 
 
 class ReunionApiLista(ListAPIView):
-
-    serializer_class = ReunionSerializer
-
+    #serializer_class = ReunionSerializer
+    serializer_class = ReunionSerializer2
     def get_queryset(self):
         return Reunion.objects.all()
 
@@ -126,8 +129,6 @@ class PersonPaginationLits(ListAPIView):
 
 
 class ReunionByPersonJob(ListAPIView):
-
     serializer_class = CountReunionSerializer
-
     def get_queryset(self):
         return Reunion.objects.cantidad_reuniones_job()
