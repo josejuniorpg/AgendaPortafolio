@@ -5,6 +5,20 @@ from .models import Person, Reunion, Hobby
 
 
 class PersonSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data): #Este es un create personalizado, en este caso puede funcionar sin el.
+        print('Create', 'Personalizado')
+        hobbies = validated_data['hobbies']
+        print('Hobby', hobbies)
+
+        person = Person.objects.create(
+            full_name=validated_data['full_name'],
+            job=validated_data['job'],
+            email=validated_data['email'],
+            phone=validated_data['phone'],
+        )
+        person.hobbies.set(hobbies)
+        return person
     class Meta:
         model = Person
         fields = ('__all__')
@@ -23,7 +37,7 @@ class PersonaSerializer(serializers.Serializer): #Serializador Geneeruci.
 
 class PersonaSerializer2(serializers.ModelSerializer):
 
-    activo = serializers.BooleanField(default=False)
+    activo = serializers.BooleanField(default=False) #Sera un campo nuevo
 
     class Meta:
         model = Person
@@ -54,7 +68,7 @@ class HobbySerializer(serializers.ModelSerializer):
 
 class PersonaSerializer3(serializers.ModelSerializer):
 
-    hobbies = HobbySerializer(many=True)
+    #hobbies = HobbySerializer(many=True)
 
     class Meta:
         model = Person
